@@ -9,12 +9,6 @@ var fs = require("fs")
   , moment = require('moment')
   ;
 
-var filesDisabled = fs.readdirSync("./disabled");
-
-if (filesDisabled.length) {
-  console.log("\n\033[01;31mWarning\033[01;0m : there are %s disabled tests\n", filesDisabled.length);
-}
-
 if (process.argv.length === 3) {
   requestedTest = process.argv[2];
 }

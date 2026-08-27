@@ -11,5 +11,6 @@ installer/clidriver
 .vs
 .vscode
 ibmdb-binaries
+package-lock.json
 typescript/dist/
 
