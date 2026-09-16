@@ -389,8 +389,9 @@ struct query_request
 
 // Macro to get c++ string from std::string (JS string via Utf8Value)
 #ifdef UNICODE
-#define GETCPPSTR(to, from, len)                             \
-  if (len > 0 && from != "null")                             \
+#define GETCPPSTR(to, from, len)                                     \
+  if (len > 0 && (size_t)(len) <= (SIZE_MAX / sizeof(uint16_t)) - 1 && \
+      from != "null")                                                \
   {                                                          \
     to = (uint16_t *)malloc((len + 1) * sizeof(uint16_t));   \
     MEMCHECK(to);                                            \
