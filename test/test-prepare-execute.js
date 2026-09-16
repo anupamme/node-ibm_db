@@ -49,18 +49,21 @@ async function testPrepareSyncBadSql(conn) {
     assert.equal(stmt.constructor.name, "ODBCStatement");
 
     // Execute should fail
-    stmt.execute(function(err, result) {
-      try {
-        assert.ok(err, "execute of bad SQL should produce error");
-        ok("bad SQL: execute returns error after deferred prepare");
-      } catch(e) { fail("bad SQL execute", e.message); }
-
-      // executeNonQuery should also fail
-      stmt.executeNonQuery(function(err, count) {
+    return new Promise(function(resolve) {
+      stmt.execute(function(err, result) {
         try {
-          assert.ok(err, "executeNonQuery of bad SQL should produce error");
-          ok("bad SQL: executeNonQuery returns error");
-        } catch(e) { fail("bad SQL executeNonQuery", e.message); }
+          assert.ok(err, "execute of bad SQL should produce error");
+          ok("bad SQL: execute returns error after deferred prepare");
+        } catch(e) { fail("bad SQL execute", e.message); }
+
+        // executeNonQuery should also fail
+        stmt.executeNonQuery(function(err, count) {
+          try {
+            assert.ok(err, "executeNonQuery of bad SQL should produce error");
+            ok("bad SQL: executeNonQuery returns error");
+          } catch(e) { fail("bad SQL executeNonQuery", e.message); }
+          resolve();
+        });
       });
     });
   } catch(e) {

@@ -256,6 +256,7 @@ async function testPoolMultipleClose() {
       conn.close(function(err) {
         if (err) { fail("pool first close", err.message); resolve(); return; }
         // After close, conn is returned to pool — should still be queryable
+        assert.equal(conn.connected, true, "pool conn stays connected after close");
         try {
           var data = conn.querySync("select 1 as C1 from sysibm.sysdummy1");
           assert.deepEqual(data, [{ C1: 1 }]);

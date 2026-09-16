@@ -32,8 +32,8 @@ async function main() {
   await testCommitAsync(conn);
   await testRollbackSync(conn);
   await testCommitSync(conn);
-  await testRollbackTransactionSync(conn);
-  await testCommitTransactionSync(conn);
+  await testRollbackTransactionCallback(conn);
+  await testCommitTransactionCallback(conn);
   await testBindingLevelTransaction(conn);
   await testBindingLevelTransactionAsync(conn);
   await cleanup(conn);
@@ -132,9 +132,9 @@ async function testCommitSync(conn) {
   } catch(e) { fail("sync commit", e.message); }
 }
 
-// rollbackTransaction (async method name)
-async function testRollbackTransactionSync(conn) {
-  console.log("\n[testRollbackTransactionSync]");
+// rollbackTransaction via callback
+async function testRollbackTransactionCallback(conn) {
+  console.log("\n[testRollbackTransactionCallback]");
   await clearTable(conn);
   return new Promise(function(resolve) {
     conn.beginTransaction(function(err) {
@@ -153,9 +153,9 @@ async function testRollbackTransactionSync(conn) {
   });
 }
 
-// commitTransaction (async method name)
-async function testCommitTransactionSync(conn) {
-  console.log("\n[testCommitTransactionSync]");
+// commitTransaction via callback
+async function testCommitTransactionCallback(conn) {
+  console.log("\n[testCommitTransactionCallback]");
   await clearTable(conn);
   return new Promise(function(resolve) {
     conn.beginTransaction(function(err) {

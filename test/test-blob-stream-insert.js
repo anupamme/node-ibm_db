@@ -286,6 +286,28 @@ ibmdb.open(cn, function(err, conn) {
     assert.ok(srcImageBuf.equals(rows[0].PHOTO));
 
     console.log("  PASS: async/await with stream works.");
+
+    var emptyStream = new Readable();
+    emptyStream._read = function() {
+      this.push(null);
+    };
+
+    await conn.query("INSERT INTO " + tableName +
+      " (ID, PHOTO, DESCR) VALUES (?, ?, ?)",
+      [
+        8,
+        { ParamType: "INPUT", DataType: "BLOB", Data: emptyStream },
+        'empty-stream'
+      ]);
+
+    var emptyRows = conn.querySync("SELECT PHOTO, DESCR FROM " + tableName +
+      " WHERE ID = 8");
+    assert.equal(emptyRows.length, 1);
+    assert.equal(emptyRows[0].DESCR, 'empty-stream');
+    assert.ok(Buffer.isBuffer(emptyRows[0].PHOTO));
+    assert.equal(emptyRows[0].PHOTO.length, 0);
+
+    console.log("  PASS: empty Readable stream works.");
   }
 
   // ======================================================================
